@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="pt-pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HG-BYTRON | Professional 3D</title>
+    <style>
+        /* DESIGN CORE: MODO ESCURO E AMARELO MECÂNICO */
+        :root {
+            --amarelo-mecanico: #FFD700;
+            --dourado-premium: #B8860B;
+            --preto-profundo: #0D0D0D;
+            --cinza-metal: #1A1A1A;
+            --colmeia-opacidade: rgba(255, 215, 0, 0.05);
+        }
+
+        body {
+            background-color: var(--preto-profundo);
+            color: white;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            overflow-x: hidden;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="30" height="26" viewBox="0 0 30 26"><path d="M15 0l15 8.66v17.32L15 34.64 0 26V8.66z" fill="none" stroke="rgba(255,215,0,0.03)" stroke-width="1"/></svg>');
+        }
+
+        /* HEADER ESTILO PLAYSTORE */
+        .header {
+            background: linear-gradient(145deg, var(--cinza-metal), #000);
+            padding: 20px;
+            text-align: center;
+            border-bottom: 2px solid var(--dourado-premium);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+
+        .logo-3d {
+            font-size: 24px;
+            font-weight: 900;
+            color: var(--amarelo-mecanico);
+            text-shadow: 2px 2px 0px var(--dourado-premium), 4px 4px 10px rgba(0,0,0,1);
+            letter-spacing: 2px;
+        }
+
+        /* STATUS DE CONTA */
+        .status-bar {
+            background: #222;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            border-bottom: 1px solid #333;
+        }
+
+        .badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .badge-cliente { background: #444; color: #bbb; }
+        .badge-pro { background: var(--amarelo-mecanico); color: black; box-shadow: 0 0 10px var(--amarelo-mecanico); }
+
+        /* INTERFACE DE MAPA SIMULADA */
+        .map-container {
+            height: 300px;
+            background: #111;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid #333;
+        }
+
+        .hexagon-marker {
+            position: absolute;
+            width: 50px;
+            height: 55px;
+            background: var(--amarelo-mecanico);
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: black;
+            font-weight: bold;
+            font-size: 14px;
+            box-shadow: 0 0 20px var(--amarelo-mecanico);
+            animation: pulse 2s infinite;
+            left: 50%; top: 40%;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 10px var(--amarelo-mecanico); }
+            50% { transform: scale(1.1); box-shadow: 0 0 25px var(--amarelo-mecanico); }
+            100% { transform: scale(1); box-shadow: 0 0 10px var(--amarelo-mecanico); }
+        }
+
+        /* PAINEL DE CONTROLO */
+        .main-panel {
+            padding: 20px;
+            background: linear-gradient(to bottom, #1a1a1a, #0d0d0d);
+        }
+
+        .card-3d {
+            background: #222;
+            border-left: 5px solid var(--amarelo-mecanico);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.5);
+        }
+
+        .price-tag {
+            color: var(--amarelo-mecanico);
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        /* BOTÕES MECÂNICOS */
+        .btn-hg {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            font-weight: 900;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+            clip-path: polygon(5% 0, 100% 0, 95% 100%, 0 100%);
+        }
+
+        .btn-m-pesa { background: #e74c3c; color: white; }
+        .btn-e-mola { background: var(--amarelo-mecanico); color: black; }
+
+        .btn-online {
+            background: #27ae60;
+            color: white;
+            display: none; /* Só aparece após pagar */
+        }
+
+        /* CHAT SIMULADO */
+        #chat-section {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            background: #111;
+            border-radius: 10px;
+            border: 1px solid var(--dourado-premium);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="logo-3d">HG-BYTRON</div>
+    </div>
+
+    <div class="status-bar">
+        <span>Utilizador: <b>Gabriel Atanásio Andessa</b></span>
+        <span id="label-perfil" class="badge badge-cliente">CLIENTE</span>
+    </div>
+
+    <div class="map-container" id="mapa">
+        <div id="meu-pin" style="display: none;" class="hexagon-marker">HG</div>
+        <p style="text-align: center; color: #444; margin-top: 130px;">Mapa em Modo Escuro 3D</p>
+    </div>
+
+    <div class="main-panel">
+        
+        <div id="seccao-pagamento">
+            <div class="card-3d">
+                <h3>Ativar Perfil Profissional</h3>
+                <p>Taxa de Aprovação: <span class="price-tag">100.00 MT</span></p>
+                <button class="btn-hg btn-e-mola" onclick="processarPagamento('e-Mola', 100, '874157727')">Pagar via e-Mola</button>
+                <button class="btn-hg btn-m-pesa" onclick="processarPagamento('M-Pesa', 100, '858787292')">Pagar via M-Pesa</button>
+            </div>
+        </div>
+
+        <div id="painel-pro" style="display: none;">
+            <div class="card-3d">
+                <h3 id="titulo-pro">Profissional Verificado ⭐</h3>
+                <p>Serviços realizados: <b id="contador-servicos">0</b></p>
+                <p>Próxima mensalidade: <span id="valor-mensal" class="price-tag">3.00 MT</span></p>
+                
+                <button id="btn-status" class="btn-hg btn-online" onclick="toggleOnline()">Ficar Online no Mapa</button>
+            </div>
+
+            <div id="chat-section">
+                <p><b>Mensagem do Cliente:</b></p>
+                <p style="font-style: italic; color: #aaa;">"Olá Gabriel, preciso de um orçamento para um serviço elétrico em Pemba."</p>
+                <button class="btn-hg btn-e-mola" style="padding: 5px;">Responder Agora</button>
+            </div>
+        </div>
+
+    </div>
+
+<script>
+    let solicitacoes = 0;
+    let profissao = "Electricista"; // Pode ser alterado para 'Vendedor'
+
+    function processarPagamento(via, valor, numero) {
+        alert("Enviando solicitação de " + valor + " MT para o seu telefone via " + via + "...");
+        
+        // Simulação de confirmação de rede
+        setTimeout(() => {
+            alert("Pagamento Confirmado! Bem-vindo ao HG-BYTRON PrO7");
+            ativarInterfacePro();
+        }, 2000);
+    }
+
+    function ativarInterfacePro() {
+        document.getElementById("label-perfil").innerText = "PROFISSIONAL +";
+        document.getElementById("label-perfil").className = "badge badge-pro";
+        document.getElementById("seccao-pagamento").style.display = "none";
+        document.getElementById("painel-pro").style.display = "block";
+        document.getElementById("btn-status").style.display = "block";
+        document.getElementById("meu-pin").style.display = "flex";
+    }
+
+    function toggleOnline() {
+        let btn = document.getElementById("btn-status");
+        if (btn.innerText === "Ficar Online no Mapa") {
+            btn.innerText = "ESTOU ONLINE (Visível)";
+            btn.style.boxShadow = "0 0 20px #27ae60";
+            simularSolicitacao();
+        } else {
+            btn.innerText = "Ficar Online no Mapa";
+            btn.style.boxShadow = "none";
+        }
+    }
+
+    function simularSolicitacao() {
+        // Simula a chegada de serviços para testar a sua lógica de preços
+        setTimeout(() => {
+            solicitacoes = 6; // Pulamos para 6 para testar a taxa de 27MT
+            document.getElementById("contador-servicos").innerText = solicitacoes;
+            document.getElementById("chat-section").style.display = "block";
+            
+            // Lógica de Preço do Gabriel
+            let valor = (solicitacoes >= 5) ? 27 : 3;
+            document.getElementById("valor-mensal").innerText = valor + ".00 MT";
+            alert("Aviso: Você atingiu 5+ solicitações. Sua conta agora é Profissional + (Taxa: " + valor + " MT)");
+        }, 3000);
+    }
+</script>
+
+</body>
+  </html>
